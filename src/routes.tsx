@@ -8,7 +8,11 @@ type AppRoute = {
 
 const routes: AppRoute[] = [
   {
-    component: lazy(() => import("src/pages/QuizForm")),
+    component: lazy(() => import("src/pages/EditQuiz")),
+    path: "/edit/:id",
+  },
+  {
+    component: lazy(() => import("src/pages/CreateQuiz")),
     path: "/create",
   },
   {
