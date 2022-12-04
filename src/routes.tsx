@@ -12,7 +12,7 @@ const routes: AppRoute[] = [
     path: "/create",
   },
   {
-    component: lazy(() => import("src/pages/QuzziesList")),
+    component: lazy(() => import("src/pages/QuizziesList")),
     path: "/",
   },
   {

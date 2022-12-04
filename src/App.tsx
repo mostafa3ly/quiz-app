@@ -1,4 +1,4 @@
-import { QuizzesProvider } from "./contexts/QuzziesContext";
+import { QuizzesProvider } from "./contexts/QuizziesContext";
 import AppRoutes from "./routes";
 
 function App() {

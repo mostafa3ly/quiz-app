@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Table from "src/components/Table";
 
-const QuzziesList: FC = () => {
+const QuizziesList: FC = () => {
   return (
     <div>
       <div
@@ -19,4 +19,4 @@ const QuzziesList: FC = () => {
   );
 };
 
-export default QuzziesList;
+export default QuizziesList;
