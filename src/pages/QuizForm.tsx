@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useState } from "react";
 import { Quiz } from "src/interfaces/Quiz";
 import { Question } from "src/interfaces/Question";
+import QuestionItem from "src/components/QuestionItem";
 
 const QuizForm: FC = () => {
   const [quiz, setQuiz] = useState<Quiz>({
@@ -35,6 +36,46 @@ const QuizForm: FC = () => {
       questions_answers: [...prevState.questions_answers, question],
     }));
   };
+
+  const handleAddAnswer = (id: number): void => {
+    setQuiz((prevState) => ({
+      ...prevState,
+      questions_answers: prevState.questions_answers.map((question) =>
+        question.id === id
+          ? {
+              ...question,
+              answers: [
+                ...question.answers,
+                { id: Date.now(), is_true: true, text: "" },
+              ],
+            }
+          : question
+      ),
+    }));
+  };
+
+  const handleChangeQuestion = (
+    e: ChangeEvent<HTMLInputElement>,
+    id: number
+  ): void => {
+    const { name, value } = e.target;
+    setQuiz((prevState) => ({
+      ...prevState,
+      questions_answers: prevState.questions_answers.map((question) =>
+        question.id === id ? { ...question, [name]: value } : question
+      ),
+    }));
+  };
+
+  const renderQuestions = (): JSX.Element[] =>
+    quiz.questions_answers.map((question) => (
+      <QuestionItem
+        key={question.id}
+        onAddAnswer={handleAddAnswer}
+        onChangeQuestion={handleChangeQuestion}
+        question={question}
+      />
+    ));
 
   return (
     <div>
@@ -72,11 +113,12 @@ const QuizForm: FC = () => {
         />
         <br />
         <div style={{ display: "flex", alignItems: "center" }}>
-          <h3>Questions</h3>
+          <h3>Questions</h3>&nbsp;&nbsp;&nbsp;
           <button type="button" onClick={handleAddQuestion}>
             Add
           </button>
         </div>
+        {renderQuestions()}
       </form>
     </div>
   );
