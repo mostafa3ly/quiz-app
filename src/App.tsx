@@ -1,9 +1,12 @@
+import { QuizzesProvider } from "./contexts/QuzziesContext";
 import AppRoutes from "./routes";
 
 function App() {
   return (
     <div className="App">
-      <AppRoutes />
+      <QuizzesProvider>
+        <AppRoutes />
+      </QuizzesProvider>
     </div>
   );
 }
