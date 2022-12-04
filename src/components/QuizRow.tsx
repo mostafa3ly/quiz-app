@@ -9,7 +9,9 @@ interface QuizRowProps {
 const QuizRow: FC<QuizRowProps> = ({ quiz }) => {
   return (
     <tr>
-      <td>{quiz.title}</td>
+      <td>
+        <Link to={`/take/${quiz.id}`}>{quiz.title}</Link>
+      </td>
       <td>{quiz.description}</td>
       <td>{quiz.questions_answers.length} Questions</td>
       <td>{quiz.score}</td>
