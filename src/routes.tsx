@@ -1,4 +1,4 @@
-import { FC, Fragment, Suspense, LazyExoticComponent } from "react";
+import { FC, Fragment, Suspense, LazyExoticComponent, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 type AppRoute = {
@@ -8,7 +8,7 @@ type AppRoute = {
 
 const routes: AppRoute[] = [
   {
-    component: () => <Fragment />,
+    component: lazy(() => import("src/pages/QuzziesList")),
     path: "/",
   },
   {
