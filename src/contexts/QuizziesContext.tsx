@@ -7,27 +7,28 @@ interface QuizzesContextState {
 
 interface QuizzesContextValue extends QuizzesContextState {
   addQuiz: (quiz: Quiz) => void;
+  editQuiz: (quiz: Quiz) => void;
 }
 
 const QuizzesContext = createContext<QuizzesContextValue>({
   quizzes: [],
   addQuiz: () => {},
+  editQuiz: () => {},
 });
 
 const initialState: QuizzesContextState = { quizzes: [] };
 
 enum ActionType {
   addQuiz,
+  editQuiz,
 }
 
-type AddQuizActionType = {
-  type: ActionType.addQuiz;
+type QuizzesContextAction = {
+  type: ActionType.addQuiz | ActionType.editQuiz;
   payload: {
     quiz: Quiz;
   };
 };
-
-type QuizzesContextAction = AddQuizActionType;
 
 const reducer = (
   state: QuizzesContextState,
@@ -36,6 +37,13 @@ const reducer = (
   switch (action.type) {
     case ActionType.addQuiz:
       return { ...state, quizzes: [...state.quizzes, action.payload.quiz] };
+    case ActionType.editQuiz:
+      return {
+        ...state,
+        quizzes: state.quizzes.map((quiz) =>
+          quiz.id === action.payload.quiz.id ? action.payload.quiz : quiz
+        ),
+      };
 
     default:
       return { ...state };
@@ -52,9 +60,14 @@ const QuizzesProvider: FC<QuizzesContextProviderProps> = ({ children }) => {
   const addQuiz = (quiz: Quiz): void => {
     dispatch({ type: ActionType.addQuiz, payload: { quiz } });
   };
+  const editQuiz = (quiz: Quiz): void => {
+    dispatch({ type: ActionType.editQuiz, payload: { quiz } });
+  };
 
   return (
-    <QuizzesContext.Provider value={{ quizzes: state.quizzes, addQuiz }}>
+    <QuizzesContext.Provider
+      value={{ quizzes: state.quizzes, addQuiz, editQuiz }}
+    >
       {children}
     </QuizzesContext.Provider>
   );

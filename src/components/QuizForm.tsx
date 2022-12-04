@@ -3,21 +3,32 @@ import { Quiz } from "src/interfaces/Quiz";
 import { Question } from "src/interfaces/Question";
 import QuestionItem from "src/components/QuestionItem";
 import useQuizzes from "src/hooks/useQuizzes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const QuizForm: FC = () => {
-  const { addQuiz } = useQuizzes();
+interface QuizFormProps {
+  isEdit?: boolean;
+  title: string;
+}
+
+type Params = { id: string };
+
+const QuizForm: FC<QuizFormProps> = ({ title, isEdit }) => {
+  const { addQuiz, editQuiz, quizzes } = useQuizzes();
   const navigate = useNavigate();
-  const [quiz, setQuiz] = useState<Quiz>({
-    id: Date.now(),
-    created: "",
-    description: "",
-    modified: "",
-    questions_answers: [],
-    score: 0,
-    title: "",
-    url: "",
-  });
+  const { id } = useParams<Params>();
+  const editedQuiz = id ? quizzes.find((quiz) => quiz.id === +id) : null;
+  const [quiz, setQuiz] = useState<Quiz>(
+    editedQuiz || {
+      id: Date.now(),
+      created: "",
+      description: "",
+      modified: "",
+      questions_answers: [],
+      score: 0,
+      title: "",
+      url: "",
+    }
+  );
 
   const handleChangeQuiz = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -101,7 +112,9 @@ const QuizForm: FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    addQuiz({ ...quiz, created: new Date().toISOString() });
+    !isEdit
+      ? addQuiz({ ...quiz, created: new Date().toISOString() })
+      : editQuiz({ ...quiz, modified: new Date().toISOString() });
     navigate("/", { replace: true });
   };
 
@@ -118,7 +131,7 @@ const QuizForm: FC = () => {
 
   return (
     <div>
-      <h1>Create quiz</h1>
+      <h1>{title}</h1>
       <form onSubmit={handleSubmit}>
         <input
           placeholder="Title"
