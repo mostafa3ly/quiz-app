@@ -45,7 +45,10 @@ const QuizForm: FC = () => {
           ? {
               ...question,
               answers: [
-                ...question.answers,
+                ...question.answers.map((answer) => ({
+                  ...answer,
+                  is_true: false,
+                })),
                 { id: Date.now(), is_true: true, text: "" },
               ],
             }
@@ -67,6 +70,31 @@ const QuizForm: FC = () => {
     }));
   };
 
+  const handleChangeAnswer = (
+    e: ChangeEvent<HTMLInputElement>,
+    id: number,
+    questionId: number
+  ): void => {
+    const { name, value } = e.target;
+    setQuiz((prevState) => ({
+      ...prevState,
+      questions_answers: prevState.questions_answers.map((question) =>
+        question.id === questionId
+          ? {
+              ...question,
+              answers: question.answers.map((answer) =>
+                name === "is_true"
+                  ? { ...answer, is_true: answer.id === id }
+                  : answer.id === id
+                  ? { ...answer, [name]: value }
+                  : answer
+              ),
+            }
+          : question
+      ),
+    }));
+  };
+
   const renderQuestions = (): JSX.Element[] =>
     quiz.questions_answers.map((question) => (
       <QuestionItem
@@ -74,6 +102,7 @@ const QuizForm: FC = () => {
         onAddAnswer={handleAddAnswer}
         onChangeQuestion={handleChangeQuestion}
         question={question}
+        onChangeAnswer={handleChangeAnswer}
       />
     ));
 
