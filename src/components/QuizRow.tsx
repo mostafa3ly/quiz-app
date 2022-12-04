@@ -1,4 +1,5 @@
 import { FC, memo } from "react";
+import { Link } from "react-router-dom";
 import { Quiz } from "src/interfaces/Quiz";
 
 interface QuizRowProps {
@@ -12,9 +13,9 @@ const QuizRow: FC<QuizRowProps> = ({ quiz }) => {
       <td>{quiz.description}</td>
       <td>{quiz.questions_answers.length} Questions</td>
       <td>{quiz.score}</td>
-      <td>{quiz.created}</td>
+      <td>{new Date(quiz.created).toLocaleString()}</td>
       <td>
-        <a href="/">Edit</a>
+        <Link to={`/edit/${quiz.id}`}>Edit</Link>
       </td>
     </tr>
   );

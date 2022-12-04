@@ -1,9 +1,13 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Quiz } from "src/interfaces/Quiz";
 import { Question } from "src/interfaces/Question";
 import QuestionItem from "src/components/QuestionItem";
+import useQuizzes from "src/hooks/useQuizzes";
+import { useNavigate } from "react-router-dom";
 
 const QuizForm: FC = () => {
+  const { addQuiz } = useQuizzes();
+  const navigate = useNavigate();
   const [quiz, setQuiz] = useState<Quiz>({
     id: Date.now(),
     created: "",
@@ -95,6 +99,12 @@ const QuizForm: FC = () => {
     }));
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    addQuiz({ ...quiz, created: new Date().toISOString() });
+    navigate("/", { replace: true });
+  };
+
   const renderQuestions = (): JSX.Element[] =>
     quiz.questions_answers.map((question) => (
       <QuestionItem
@@ -109,7 +119,7 @@ const QuizForm: FC = () => {
   return (
     <div>
       <h1>Create quiz</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           placeholder="Title"
           value={quiz.title}
@@ -148,6 +158,7 @@ const QuizForm: FC = () => {
           </button>
         </div>
         {renderQuestions()}
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import Table from "src/components/Table";
 
 const QuizziesList: FC = () => {
@@ -12,7 +13,7 @@ const QuizziesList: FC = () => {
         }}
       >
         <h1>Quizzes</h1>
-        <a href="/create">Create quiz</a>
+        <Link to="/create">Create quiz</Link>
       </div>
       <Table />
     </div>
